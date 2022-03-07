@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Usage: helmenv completions <command> [arg1 arg2...]
+
+set -e
+[ -n "$HELMENV_DEBUG" ] && set -x
+
+COMMAND="$1"
+if [ -z "$COMMAND" ]; then
+  helmenv-help --usage completions >&2
+  exit 1
+fi
+
+# Provide helmenv completions
+if [ "$COMMAND" = "--complete" ]; then
+  exec helmenv-commands
+fi
+
+COMMAND_PATH="$(command -v "helmenv-$COMMAND" || command -v "helmenv-sh-$COMMAND")"
+
+# --help is provided automatically
+echo --help
+
+if grep -iE "^([#%]|--|//) provide helmenv completions" "$COMMAND_PATH" >/dev/null; then
+  shift
+  exec "$COMMAND_PATH" --complete "$@"
+fi

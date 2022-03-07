@@ -24,8 +24,8 @@ fi
 HELMENV_VERSION="$1"
 HELMENV_VERSION_FILE="${HELMENV_ROOT}/version"
 
-if [ -n "$HELMENV_VERSION" ]; then
-  helmenv-version-file-write "$HELMENV_VERSION_FILE" "$HELMENV_VERSION"
+if [ -n "${HELMENV_VERSION##v}" ]; then
+  helmenv-version-file-write "$HELMENV_VERSION_FILE" "${HELMENV_VERSION##v}"
 else
   helmenv-version-file-read "$HELMENV_VERSION_FILE" || echo system
 fi
